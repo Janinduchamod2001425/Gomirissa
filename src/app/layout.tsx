@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Muthu Tours",
-  description: "Whale Watching and Fishing Tours in Sri Lanka",
+  title: "GoMirissa",
+  description: "Fishing Tours in Mirissa, Sri Lanka",
 };
 
 export default function RootLayout({

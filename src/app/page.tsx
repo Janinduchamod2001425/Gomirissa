@@ -2,27 +2,70 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import Image from "next/image";
+
+import logo from "../assets/gomirissa.png";
 
 // --- Icons ---
 const WaveIcon = () => (
-  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg
+    className="w-6 h-6"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
     <path d="M2 12c.8-.9 1.8-1.5 3-1.5s2.2.6 3 1.5c.8.9 1.8 1.5 3 1.5s2.2-.6 3-1.5c.8-.9 1.8-1.5 3-1.5s2.2.6 3 1.5" />
     <path d="M2 17c.8-.9 1.8-1.5 3-1.5s2.2.6 3 1.5c.8.9 1.8 1.5 3 1.5s2.2-.6 3-1.5c.8-.9 1.8-1.5 3-1.5s2.2.6 3 1.5" />
   </svg>
 );
 
-const AnchorIcon = ({ size = 24, className = "" }: { size?: number, className?: string }) => (
-  <svg width={size} height={size} className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+const AnchorIcon = ({
+  size = 24,
+  className = "",
+}: {
+  size?: number;
+  className?: string;
+}) => (
+  <svg
+    width={size}
+    height={size}
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
     <circle cx="12" cy="5" r="3" />
     <line x1="12" y1="8" x2="12" y2="21" />
     <path d="M5 12H2a10 10 0 0020 0h-3" />
@@ -30,40 +73,76 @@ const AnchorIcon = ({ size = 24, className = "" }: { size?: number, className?: 
 );
 
 const MapPinIcon = () => (
-  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg
+    className="w-5 h-5"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
     <circle cx="12" cy="10" r="3" />
   </svg>
 );
 
 const PhoneIcon = () => (
-  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg
+    className="w-5 h-5"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
     <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" />
   </svg>
 );
 
 const MailIcon = () => (
-  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg
+    className="w-5 h-5"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
     <polyline points="22,6 12,13 2,6" />
   </svg>
 );
 
 const ClockIcon = () => (
-  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg
+    className="w-5 h-5"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
     <circle cx="12" cy="12" r="10" />
     <polyline points="12 6 12 12 16 14" />
   </svg>
 );
 
 const StarIcon = ({ filled = true }: { filled?: boolean }) => (
-  <svg className="w-4 h-4" viewBox="0 0 24 24" fill={filled ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2">
+  <svg
+    className="w-4 h-4"
+    viewBox="0 0 24 24"
+    fill={filled ? "currentColor" : "none"}
+    stroke="currentColor"
+    strokeWidth="2"
+  >
     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
   </svg>
 );
 
 const MenuIcon = () => (
-  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg
+    className="w-6 h-6"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
     <line x1="3" y1="12" x2="21" y2="12" />
     <line x1="3" y1="6" x2="21" y2="6" />
     <line x1="3" y1="18" x2="21" y2="18" />
@@ -71,7 +150,13 @@ const MenuIcon = () => (
 );
 
 const UsersIcon = () => (
-  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg
+    className="w-5 h-5"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
     <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
     <circle cx="9" cy="7" r="4" />
     <path d="M23 21v-2a4 4 0 00-3-3.87" />
@@ -80,7 +165,13 @@ const UsersIcon = () => (
 );
 
 const CheckIcon = () => (
-  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg
+    className="w-5 h-5"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
     <polyline points="20 6 9 17 4 12" />
   </svg>
 );
@@ -102,7 +193,7 @@ const tours = [
       "Experienced local crew",
       "Safety briefing & life jackets",
       "Catch tuna & barracuda",
-      "Fresh catch cooking available"
+      "Fresh catch cooking available",
     ],
     badge: "Adventure Pick",
     badgeColor: "bg-amber-500 text-white",
@@ -110,18 +201,20 @@ const tours = [
   {
     id: "snorkeling",
     title: "Snorkeling with Turtles",
-    description: "Discover vibrant coral reefs, colorful tropical fish, and swim alongside sea turtles in the clear waters near Mirissa.",
+    description:
+      "Discover vibrant coral reefs, colorful tropical fish, and swim alongside sea turtles in the clear waters near Mirissa.",
     price: 35,
     duration: "3 hours",
     maxGuests: 12,
-    image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&h=600&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&h=600&fit=crop",
     features: [
       "All equipment provided",
       "Professional instructor",
       "Visit turtle hotspots",
       "Fruits & refreshments",
       "Shallow & safe areas",
-      "Eco-friendly practices"
+      "Eco-friendly practices",
     ],
     badge: "Most Popular",
     badgeColor: "bg-blue-600 text-white",
@@ -129,18 +222,20 @@ const tours = [
   {
     id: "snorkeling-whales",
     title: "Snorkeling with Whales",
-    description: "A rare opportunity to snorkel near gentle giants. A responsible wildlife experience strictly adhering to safety guidelines.",
+    description:
+      "A rare opportunity to snorkel near gentle giants. A responsible wildlife experience strictly adhering to safety guidelines.",
     price: 80,
     duration: "4–5 hours",
     maxGuests: 8,
-    image: "https://cdn.sanity.io/images/esqfj3od/production/3bf47706fcbf56cf473827e4f2fcdbe0383d8242-1080x720.webp?w=800&q=65&fit=clip&auto=format",
+    image:
+      "https://cdn.sanity.io/images/esqfj3od/production/3bf47706fcbf56cf473827e4f2fcdbe0383d8242-1080x720.webp?w=800&q=65&fit=clip&auto=format",
     features: [
       "Responsible approach",
       "High-quality gear",
       "Expert marine guide",
       "Weather dependent",
       "Photos included",
-      "Seasonal (Dec–Apr)"
+      "Seasonal (Dec–Apr)",
     ],
     badge: "Unique Experience",
     badgeColor: "bg-cyan-500 text-white",
@@ -200,12 +295,16 @@ const galleryImages = [
   { src: "/images/18.jpeg", alt: "Muthu Tour destination" },
   { src: "/images/19.jpeg", alt: "Muthu Tour destination" },
   { src: "/images/20.jpeg", alt: "Muthu Tour destination" },
-  { src: "/images/21.jpeg", alt: "Muthu Tour destination" }
+  { src: "/images/21.jpeg", alt: "Muthu Tour destination" },
 ];
 
 export default function Home() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedTour, setSelectedTour] = useState<string>("");
+
+  // --- STATE CHANGE: Guest count (defaults to 2) ---
+  const [guestCount, setGuestCount] = useState<number>(2);
+
   const [bookingOpen, setBookingOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -213,12 +312,17 @@ export default function Home() {
   const [isGalleryExpanded, setIsGalleryExpanded] = useState(false);
   const initialGalleryCount = 5;
 
+  // --- LOGIC CHANGE: Price Calculation ---
+  const selectedTourData = tours.find((t) => t.id === selectedTour);
+  const pricePerPerson = selectedTourData ? selectedTourData.price : 0;
+  const totalPrice = pricePerPerson * guestCount;
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const navLinks = [
@@ -235,34 +339,41 @@ export default function Home() {
   };
 
   const scrollToContact = () => {
-    const element = document.getElementById('contact');
+    const element = document.getElementById("contact");
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   return (
     <main className="min-h-screen font-sans antialiased text-slate-900 selection:bg-cyan-200 selection:text-cyan-900">
-      
       {/* --- Navigation --- */}
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out border-b border-transparent
-        ${scrolled 
-          ? "bg-white/80 backdrop-blur-xl shadow-lg border-white/20 py-3" 
-          : "bg-transparent py-5"
+        ${
+          scrolled
+            ? "bg-white/80 backdrop-blur-xl shadow-lg border-white/20 py-3"
+            : "bg-transparent py-5"
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          
           {/* Logo */}
-          <div className="flex items-center gap-2 group cursor-pointer">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors duration-300 shadow-md
-              ${scrolled ? "bg-blue-600 text-white" : "bg-white text-blue-600"}`}>
-              <WaveIcon />
+          <div className="flex items-center gap-3 group cursor-pointer">
+            <div className="relative w-12 h-12 md:w-14 md:h-14 transition-transform duration-300 group-hover:scale-105">
+              <Image
+                src={logo}
+                alt="GoMirissa Fishing Tours Logo"
+                fill
+                priority
+                className="object-contain rounded-2xl"
+              />
             </div>
-            <span className={`text-xl font-bold tracking-tight transition-colors duration-300
-              ${scrolled ? "text-slate-900" : "text-white"}`}>
-              gomirissa
+
+            <span
+              className={`text-xl md:text-2xl font-bold tracking-tight transition-colors duration-300
+    ${scrolled ? "text-slate-900" : "text-white"}`}
+            >
+              GoMirissa
             </span>
           </div>
 
@@ -278,12 +389,14 @@ export default function Home() {
                 {link.label}
               </a>
             ))}
-            <Button 
+            <Button
               onClick={() => setBookingOpen(true)}
               className={`rounded-full px-6 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105
-              ${scrolled 
-                ? "bg-blue-600 hover:bg-blue-700 text-white" 
-                : "bg-white hover:bg-blue-50 text-blue-900"}`}
+              ${
+                scrolled
+                  ? "bg-blue-600 hover:bg-blue-700 text-white"
+                  : "bg-white hover:bg-blue-50 text-blue-900"
+              }`}
             >
               Book Now
             </Button>
@@ -300,7 +413,10 @@ export default function Home() {
                 <MenuIcon />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-80 bg-white/95 backdrop-blur-xl border-l border-white/20 p-8">
+            <SheetContent
+              side="right"
+              className="w-80 bg-white/95 backdrop-blur-xl border-l border-white/20 p-8"
+            >
               <div className="flex flex-col gap-6 mt-12">
                 {navLinks.map((link) => (
                   <a
@@ -313,7 +429,10 @@ export default function Home() {
                   </a>
                 ))}
                 <div className="h-px bg-slate-200 my-2" />
-                <Button onClick={() => setBookingOpen(true)} className="bg-blue-600 hover:bg-blue-700 w-full py-6 text-lg rounded-xl shadow-lg shadow-blue-200">
+                <Button
+                  onClick={() => setBookingOpen(true)}
+                  className="bg-blue-600 hover:bg-blue-700 w-full py-6 text-lg rounded-xl shadow-lg shadow-blue-200"
+                >
                   Book Adventure
                 </Button>
               </div>
@@ -344,19 +463,20 @@ export default function Home() {
             <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
             Top Rated Ocean Tours in Mirissa
           </div>
-          
+
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 leading-[0.9] tracking-tighter drop-shadow-sm animate-in fade-in slide-in-from-bottom-6 duration-1000 fill-mode-backwards delay-100">
-            Discover the <br/>
+            Discover the <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-blue-200 to-white">
               Deep Blue
             </span>
           </h1>
-          
+
           <p className="text-lg md:text-xl text-slate-200 mb-10 max-w-2xl mx-auto leading-relaxed font-light animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
-            Experience the thrill of deep-sea fishing and the serenity of snorkeling with Muthu Tours. 
-            Your gateway to Sri Lanka's underwater wonders.
+            Experience the thrill of deep-sea fishing and the serenity of
+            snorkeling with Muthu Tours. Your gateway to Sri Lanka's underwater
+            wonders.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-300">
             <Button
               size="lg"
@@ -387,7 +507,9 @@ export default function Home() {
             ].map((item, idx) => (
               <div key={idx} className="flex items-center gap-2 text-white/90">
                 <div className="text-cyan-300">{item.icon}</div>
-                <span className="text-sm font-semibold tracking-wide">{item.text}</span>
+                <span className="text-sm font-semibold tracking-wide">
+                  {item.text}
+                </span>
               </div>
             ))}
           </div>
@@ -397,24 +519,27 @@ export default function Home() {
       {/* --- Tours Section --- */}
       <section id="tours" className="py-24 bg-slate-50 relative">
         <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-slate-900/5 to-transparent pointer-events-none" />
-        
+
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
             <div className="max-w-2xl">
-              <span className="text-blue-600 font-bold tracking-wider uppercase text-sm mb-2 block">Our Packages</span>
+              <span className="text-blue-600 font-bold tracking-wider uppercase text-sm mb-2 block">
+                Our Packages
+              </span>
               <h2 className="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">
                 Choose Your <span className="text-blue-600">Expedition</span>
               </h2>
               <p className="text-slate-600 mt-4 text-lg">
-                Curated experiences for every type of traveler. From adrenaline-pumping fishing to peaceful snorkeling.
+                Curated experiences for every type of traveler. From
+                adrenaline-pumping fishing to peaceful snorkeling.
               </p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {tours.map((tour) => (
-              <Card 
-                key={tour.id} 
+              <Card
+                key={tour.id}
                 className="group border-0 bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden flex flex-col h-full"
               >
                 {/* Image Area */}
@@ -425,7 +550,9 @@ export default function Home() {
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60" />
-                  <Badge className={`absolute top-4 left-4 border-0 px-3 py-1.5 ${tour.badgeColor} shadow-lg backdrop-blur-sm`}>
+                  <Badge
+                    className={`absolute top-4 left-4 border-0 px-3 py-1.5 ${tour.badgeColor} shadow-lg backdrop-blur-sm`}
+                  >
                     {tour.badge}
                   </Badge>
                   <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end text-white">
@@ -433,19 +560,28 @@ export default function Home() {
                       <div className="flex items-center gap-1.5 text-xs font-medium bg-black/30 backdrop-blur-md px-2 py-1 rounded-md mb-2 w-fit">
                         <ClockIcon /> {tour.duration}
                       </div>
-                      <h3 className="text-2xl font-bold leading-tight">{tour.title}</h3>
+                      <h3 className="text-2xl font-bold leading-tight">
+                        {tour.title}
+                      </h3>
                     </div>
                   </div>
                 </div>
 
                 {/* Content Area */}
                 <CardContent className="p-6 flex-grow">
-                  <p className="text-slate-600 mb-6 leading-relaxed">{tour.description}</p>
-                  
+                  <p className="text-slate-600 mb-6 leading-relaxed">
+                    {tour.description}
+                  </p>
+
                   <div className="space-y-3 mb-6">
                     {tour.features.slice(0, 4).map((feature, idx) => (
-                      <div key={idx} className="flex items-start gap-3 text-sm text-slate-700">
-                        <div className="text-green-500 mt-0.5"><CheckIcon /></div>
+                      <div
+                        key={idx}
+                        className="flex items-start gap-3 text-sm text-slate-700"
+                      >
+                        <div className="text-green-500 mt-0.5">
+                          <CheckIcon />
+                        </div>
                         <span>{feature}</span>
                       </div>
                     ))}
@@ -454,14 +590,18 @@ export default function Home() {
 
                 <CardFooter className="p-6 pt-0 mt-auto flex items-center justify-between border-t border-slate-100 bg-slate-50/50">
                   <div className="flex flex-col">
-                    <span className="text-sm text-slate-500">Starting from</span>
+                    <span className="text-sm text-slate-500">
+                      Starting from
+                    </span>
                     <div className="flex items-baseline gap-1">
-                      <span className="text-2xl font-bold text-slate-900">${tour.price}</span>
+                      <span className="text-2xl font-bold text-slate-900">
+                        ${tour.price}
+                      </span>
                       <span className="text-slate-500">/person</span>
                     </div>
                   </div>
-                  <Button 
-                    onClick={() => handleBookNow(tour.id)} 
+                  <Button
+                    onClick={() => handleBookNow(tour.id)}
                     className="bg-slate-900 hover:bg-slate-800 text-white rounded-xl px-6 h-12 shadow-lg hover:shadow-xl transition-all"
                   >
                     Book Now
@@ -477,42 +617,62 @@ export default function Home() {
       <section id="gallery" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-cyan-600 font-bold tracking-wider uppercase text-sm">Visual Diary</span>
+            <span className="text-cyan-600 font-bold tracking-wider uppercase text-sm">
+              Visual Diary
+            </span>
             <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 mt-2">
               Captured Moments
             </h2>
             <p className="text-lg text-slate-600">
-              Real photos from our daily excursions. No stock filters, just pure ocean beauty.
+              Real photos from our daily excursions. No stock filters, just pure
+              ocean beauty.
             </p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[200px]">
-            {galleryImages.slice(0, isGalleryExpanded ? galleryImages.length : initialGalleryCount).map((img, idx) => (
-              <div
-                key={idx}
-                onClick={() => setSelectedImage(img.src)}
-                className={`relative rounded-2xl overflow-hidden cursor-zoom-in group shadow-md
+            {galleryImages
+              .slice(
+                0,
+                isGalleryExpanded ? galleryImages.length : initialGalleryCount,
+              )
+              .map((img, idx) => (
+                <div
+                  key={idx}
+                  onClick={() => setSelectedImage(img.src)}
+                  className={`relative rounded-2xl overflow-hidden cursor-zoom-in group shadow-md
                   ${idx === 0 ? "col-span-2 row-span-2 md:col-span-2 md:row-span-2" : "col-span-1 row-span-1"}
                 `}
-              >
-                <img
-                  src={img.src}
-                  alt={img.alt}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="bg-white/20 backdrop-blur-md p-3 rounded-full text-white">
-                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" /></svg>
+                >
+                  <img
+                    src={img.src}
+                    alt={img.alt}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="bg-white/20 backdrop-blur-md p-3 rounded-full text-white">
+                      <svg
+                        className="w-6 h-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
+                        />
+                      </svg>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
 
           <div className="flex justify-center mt-12">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               size="lg"
               onClick={() => setIsGalleryExpanded(!isGalleryExpanded)}
               className="rounded-full px-8 border-slate-200 text-slate-700 hover:bg-blue-600 hover:border-blue-600 hover:text-white transition-all shadow-sm"
@@ -523,87 +683,107 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- About Section --- */}
-      <section id="about" className="py-24 bg-slate-50 relative overflow-hidden">
-        {/* Decorative blobs */}
-        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 -translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-cyan-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 translate-x-1/2 translate-y-1/2" />
+      {/* --- About Section (MOBILE FIX APPLIED) --- */}
+      <section
+        id="about"
+        className="py-16 lg:py-24 bg-slate-50 relative overflow-hidden"
+      >
+        {/* Decorative blobs - Adjusted sizes for mobile vs desktop */}
+        <div className="absolute top-0 left-0 w-64 h-64 lg:w-[500px] lg:h-[500px] bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 -translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute bottom-0 right-0 w-64 h-64 lg:w-[500px] lg:h-[500px] bg-cyan-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 translate-x-1/2 translate-y-1/2" />
 
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Text Content */}
-            <div>
+            <div className="order-1">
+              {" "}
+              {/* Explicit order to ensure text is first on mobile */}
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-bold uppercase tracking-wide mb-6">
                 Established 2010
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-tight">
-                Authentic Mirissa. <br/>
+              <h2 className="text-3xl md:text-5xl font-bold text-slate-900 mb-6 leading-tight">
+                Authentic Mirissa. <br />
                 <span className="text-blue-600">Personalized Service.</span>
               </h2>
-              
-              <div className="space-y-6 text-lg text-slate-600 mb-8 leading-relaxed">
+              <div className="space-y-6 text-base md:text-lg text-slate-600 mb-8 leading-relaxed">
                 <p>
-                  Muthu Tours is a locally owned service founded by Sandun Muthumala. For over 8 years, we have been the trusted choice for travelers seeking genuine ocean experiences away from the crowded tourist traps.
+                  Muthu Tours is a locally owned service founded by Sandun
+                  Muthumala. For over 8 years, we have been the trusted choice
+                  for travelers seeking genuine ocean experiences away from the
+                  crowded tourist traps.
                 </p>
                 <p>
-                  We believe the Sri Lankan ocean should be explored with respect and precision. We aren't just boat drivers; we are ocean enthusiasts ready to show you the hidden beauty of Mirissa.
+                  We believe the Sri Lankan ocean should be explored with
+                  respect and precision. We aren't just boat drivers; we are
+                  ocean enthusiasts ready to show you the hidden beauty of
+                  Mirissa.
                 </p>
               </div>
-
               {/* Owner's Note Card */}
               <div className="bg-white border-l-4 border-blue-600 p-6 rounded-r-xl shadow-lg relative overflow-hidden group hover:shadow-xl transition-shadow">
                 <div className="absolute top-0 right-0 p-4 opacity-5">
-                   <AnchorIcon size={100} />
+                  <AnchorIcon size={80} className="lg:w-[100px] lg:h-[100px]" />
                 </div>
                 <h4 className="font-bold text-slate-900 mb-2 flex items-center gap-2">
-                  <span className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-blue-600"><UsersIcon /></span>
+                  <span className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-blue-600">
+                    <UsersIcon />
+                  </span>
                   A Note from Sandun
                 </h4>
                 <p className="italic text-slate-600 text-sm md:text-base">
-                  "I handle every tour coordination myself. No agents, no middlemen. When you book with Muthu Tours, you are booking directly with me and my local crew. Watch out for imitators!"
+                  "I handle every tour coordination myself. No agents, no
+                  middlemen. When you book with Muthu Tours, you are booking
+                  directly with me and my local crew. Watch out for imitators!"
                 </p>
               </div>
-
               {/* Stats Cards */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-10">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 mt-8 lg:mt-10">
                 {[
                   { label: "Years Active", value: "8+" },
                   { label: "Happy Guests", value: "5k+" },
                   { label: "Rating", value: "5.0" },
                   { label: "Safety Record", value: "100%" },
                 ].map((stat, i) => (
-                  <div key={i} className="text-center p-4 bg-white rounded-2xl shadow-sm border border-slate-100">
-                    <div className="text-2xl font-bold text-slate-900">{stat.value}</div>
-                    <div className="text-xs text-slate-500 uppercase font-medium mt-1">{stat.label}</div>
+                  <div
+                    key={i}
+                    className="text-center p-3 md:p-4 bg-white rounded-2xl shadow-sm border border-slate-100"
+                  >
+                    <div className="text-xl md:text-2xl font-bold text-slate-900">
+                      {stat.value}
+                    </div>
+                    <div className="text-[10px] md:text-xs text-slate-500 uppercase font-medium mt-1">
+                      {stat.label}
+                    </div>
                   </div>
                 ))}
               </div>
-
-              {/* NEW: Get Info Button (Added here as requested) */}
               <div className="mt-10">
-                <Button 
+                <Button
                   onClick={scrollToContact}
                   className="bg-slate-900 text-white rounded-full px-8 py-6 text-lg font-medium hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl flex items-center gap-2 w-full sm:w-auto justify-center"
                 >
                   Get Info <span className="text-xl">→</span>
                 </Button>
               </div>
-
             </div>
 
-            {/* Image Composition */}
-            <div className="relative h-[600px] w-full hidden lg:block">
-              <div className="absolute top-10 left-10 w-3/4 h-3/4 bg-slate-200 rounded-[3rem] rotate-3" />
+            {/* Image Composition - FIXED: Visible on mobile now */}
+            <div className="order-2 relative h-[400px] lg:h-[600px] w-full mt-8 lg:mt-0">
+              {/* Background Shape */}
+              <div className="absolute top-8 left-4 lg:top-10 lg:left-10 w-3/4 h-3/4 bg-slate-200 rounded-[2rem] lg:rounded-[3rem] rotate-3" />
+
+              {/* Main Large Image */}
               <img
                 src="/images/15.jpeg"
                 alt="Whale watching boat"
-                className="absolute top-0 left-0 w-3/4 h-3/4 object-cover rounded-[3rem] shadow-2xl z-10 hover:rotate-1 transition-transform duration-500"
+                className="absolute top-0 left-0 w-3/4 h-3/4 object-cover rounded-[2rem] lg:rounded-[3rem] shadow-2xl z-10 hover:rotate-1 transition-transform duration-500"
               />
+
+              {/* Secondary Overlapping Image */}
               <img
                 src="/images/muthu.jpg"
                 alt="Sandun Muthumala"
-                className="absolute bottom-10 right-4 w-1/2 h-1/2 object-cover rounded-[2rem] shadow-2xl border-8 border-white z-20 hover:-translate-y-2 transition-transform duration-500"
+                className="absolute bottom-0 right-0 lg:bottom-10 lg:right-4 w-1/2 h-1/2 object-cover rounded-[1.5rem] lg:rounded-[2rem] shadow-2xl border-4 lg:border-8 border-white z-20 hover:-translate-y-2 transition-transform duration-500"
               />
             </div>
           </div>
@@ -611,27 +791,42 @@ export default function Home() {
       </section>
 
       {/* --- Testimonials Section --- */}
-      <section id="testimonials" className="py-24 bg-gradient-to-br from-slate-900 to-slate-800 text-white">
+      <section
+        id="testimonials"
+        className="py-24 bg-gradient-to-br from-slate-900 to-slate-800 text-white"
+      >
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-end items-start mb-12 md:mb-16 sm:-mt-0 -mt-10 gap-4 text-left">
             <div>
-              <Badge className="bg-blue-500/20 text-blue-200 hover:bg-blue-500/30 mb-4 border-0">Traveler Reviews</Badge>
-              <h2 className="text-4xl md:text-5xl font-bold">Stories from the Sea</h2>
+              <Badge className="px-4 py-2 rounded-3xl bg-blue-500/20 text-blue-200 hover:bg-blue-500/30 mb-4 border-0">
+                Traveler Reviews
+              </Badge>
+              <h2 className="text-4xl md:text-5xl font-bold">
+                Stories from the Sea
+              </h2>
             </div>
-            <div className="flex items-center gap-2 text-yellow-400 bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm">
-              <StarIcon /> <span className="font-bold text-white">5.0</span> <span className="text-white/60 text-sm">Average Rating</span>
+            <div className="flex items-center gap-2 text-yellow-400 bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm self-start md:self-auto">
+              <StarIcon /> <span className="font-bold text-white">5.0</span>{" "}
+              <span className="text-white/60 text-sm">Average Rating</span>
             </div>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {testimonials.map((t, idx) => (
-              <Card key={idx} className="bg-white/5 border-white/10 backdrop-blur-sm text-slate-100 hover:bg-white/10 transition-colors duration-300">
+              <Card
+                key={idx}
+                className="bg-white/5 border-white/10 backdrop-blur-sm text-slate-100 hover:bg-white/10 transition-colors duration-300"
+              >
                 <CardContent className="pt-6">
                   <div className="flex gap-1 text-yellow-400 mb-4">
-                    {[...Array(t.rating)].map((_, i) => <StarIcon key={i} />)}
+                    {[...Array(t.rating)].map((_, i) => (
+                      <StarIcon key={i} />
+                    ))}
                   </div>
-                  <p className="text-slate-300 text-sm leading-relaxed mb-6 min-h-[80px]">"{t.text}"</p>
-                  
+                  <p className="text-slate-300 text-sm leading-relaxed mb-6 min-h-[80px]">
+                    "{t.text}"
+                  </p>
+
                   <div className="flex items-center gap-3 pt-4 border-t border-white/10">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center font-bold text-white text-sm shadow-lg">
                       {t.avatar}
@@ -652,22 +847,36 @@ export default function Home() {
       <section id="contact" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="bg-blue-600 rounded-[3rem] overflow-hidden shadow-2xl flex flex-col lg:flex-row">
-            
             {/* Info Side */}
             <div className="lg:w-2/5 p-10 md:p-16 bg-blue-600 text-white flex flex-col justify-between relative overflow-hidden">
               <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-              
+
               <div className="relative z-10">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6">Let's Plan Your Trip</h2>
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                  Let's Plan Your Trip
+                </h2>
                 <p className="text-blue-100 mb-10 text-lg">
-                  Have questions about the weather, whale season, or custom packages? We're here to help.
+                  Have questions about the weather, whale season, or custom
+                  packages? We're here to help.
                 </p>
-                
+
                 <div className="space-y-8">
                   {[
-                    { icon: <MapPinIcon />, title: "Visit Us", content: "49 A, Bandaramulla, Mirissa, Sri Lanka" },
-                    { icon: <PhoneIcon />, title: "Call / WhatsApp", content: "+94 71 434 3478" },
-                    { icon: <MailIcon />, title: "Email Us", content: "muthutoursmirissa@gmail.com" },
+                    {
+                      icon: <MapPinIcon />,
+                      title: "Visit Us",
+                      content: "49 A, Bandaramulla, Mirissa, Sri Lanka",
+                    },
+                    {
+                      icon: <PhoneIcon />,
+                      title: "Call / WhatsApp",
+                      content: "+94 71 434 3478",
+                    },
+                    {
+                      icon: <MailIcon />,
+                      title: "Email Us",
+                      content: "muthutoursmirissa@gmail.com",
+                    },
                   ].map((item, idx) => (
                     <div key={idx} className="flex items-start gap-4">
                       <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-md flex-shrink-0">
@@ -675,15 +884,17 @@ export default function Home() {
                       </div>
                       <div>
                         <h3 className="font-semibold text-lg">{item.title}</h3>
-                        <p className="text-blue-100 opacity-90">{item.content}</p>
+                        <p className="text-blue-100 opacity-90">
+                          {item.content}
+                        </p>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
-              
+
               <div className="relative z-10 mt-12 flex gap-4">
-                 {/* Social placeholders could go here */}
+                {/* Social placeholders could go here */}
               </div>
             </div>
 
@@ -693,17 +904,27 @@ export default function Home() {
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label className="text-slate-600">First Name</Label>
-                    <Input placeholder="John" className="bg-slate-50 border-slate-200 h-12" />
+                    <Input
+                      placeholder="John"
+                      className="bg-slate-50 border-slate-200 h-12"
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label className="text-slate-600">Last Name</Label>
-                    <Input placeholder="Doe" className="bg-slate-50 border-slate-200 h-12" />
+                    <Input
+                      placeholder="Doe"
+                      className="bg-slate-50 border-slate-200 h-12"
+                    />
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <Label className="text-slate-600">Email Address</Label>
-                  <Input type="email" placeholder="john@example.com" className="bg-slate-50 border-slate-200 h-12" />
+                  <Input
+                    type="email"
+                    placeholder="john@example.com"
+                    className="bg-slate-50 border-slate-200 h-12"
+                  />
                 </div>
 
                 <div className="space-y-2">
@@ -723,7 +944,10 @@ export default function Home() {
 
                 <div className="space-y-2">
                   <Label className="text-slate-600">Message</Label>
-                  <Textarea placeholder="Tell us about your dates and group size..." className="bg-slate-50 border-slate-200 min-h-[150px] resize-none" />
+                  <Textarea
+                    placeholder="Tell us about your dates and group size..."
+                    className="bg-slate-50 border-slate-200 min-h-[150px] resize-none"
+                  />
                 </div>
 
                 <Button className="w-full bg-slate-900 hover:bg-slate-800 text-white h-14 text-lg rounded-xl shadow-lg">
@@ -740,47 +964,121 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
             <div className="space-y-4">
-              <div className="flex items-center gap-2 text-white mb-4">
-                <div className="bg-blue-600 w-8 h-8 rounded-lg flex items-center justify-center"><WaveIcon /></div>
-                <span className="text-xl font-bold">gomirissa</span>
+              {/* Logo + Brand Name */}
+              <div className="flex items-center gap-3 text-white">
+                <div className="relative w-14 h-14 flex-shrink-0">
+                  <Image
+                    src={logo}
+                    alt="GoMirissa Fishing Tours Logo"
+                    fill
+                    className="object-contain rounded-2xl"
+                    priority
+                  />
+                </div>
+
+                <span className="text-xl font-bold tracking-wide">
+                  GoMirissa
+                </span>
               </div>
-              <p className="text-sm leading-relaxed">
-                Creating unforgettable ocean memories in Sri Lanka since 2010. Authentic, safe, and locally guided.
+
+              {/* Tagline */}
+              <p className="text-sm leading-relaxed text-white/80 max-w-xs">
+                Creating unforgettable ocean memories in Sri Lanka since 2010.
+                Authentic, safe, and locally guided.
               </p>
             </div>
-            
+
             <div>
               <h4 className="text-white font-bold mb-6">Experiences</h4>
               <ul className="space-y-3 text-sm">
-                <li><a href="#" className="hover:text-blue-500 transition-colors">Snorkeling with Turtles</a></li>
-                <li><a href="#" className="hover:text-blue-500 transition-colors">Whale Watching</a></li>
-                <li><a href="#" className="hover:text-blue-500 transition-colors">Deep Sea Fishing</a></li>
-                <li><a href="#" className="hover:text-blue-500 transition-colors">Private Boat Hire</a></li>
+                <li>
+                  <a href="#" className="hover:text-blue-500 transition-colors">
+                    Snorkeling with Turtles
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-blue-500 transition-colors">
+                    Whale Watching
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-blue-500 transition-colors">
+                    Deep Sea Fishing
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-blue-500 transition-colors">
+                    Private Boat Hire
+                  </a>
+                </li>
               </ul>
             </div>
-            
+
             <div>
               <h4 className="text-white font-bold mb-6">Company</h4>
               <ul className="space-y-3 text-sm">
-                <li><a href="#about" className="hover:text-blue-500 transition-colors">About Us</a></li>
-                <li><a href="#gallery" className="hover:text-blue-500 transition-colors">Gallery</a></li>
-                <li><a href="#testimonials" className="hover:text-blue-500 transition-colors">Reviews</a></li>
-                <li><a href="#contact" className="hover:text-blue-500 transition-colors">Contact</a></li>
+                <li>
+                  <a
+                    href="#about"
+                    className="hover:text-blue-500 transition-colors"
+                  >
+                    About Us
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#gallery"
+                    className="hover:text-blue-500 transition-colors"
+                  >
+                    Gallery
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#testimonials"
+                    className="hover:text-blue-500 transition-colors"
+                  >
+                    Reviews
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#contact"
+                    className="hover:text-blue-500 transition-colors"
+                  >
+                    Contact
+                  </a>
+                </li>
               </ul>
             </div>
-            
+
             <div>
               <h4 className="text-white font-bold mb-6">Legal</h4>
               <ul className="space-y-3 text-sm">
-                <li><a href="#" className="hover:text-blue-500 transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-blue-500 transition-colors">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-blue-500 transition-colors">Cancellation Policy</a></li>
+                <li>
+                  <a href="#" className="hover:text-blue-500 transition-colors">
+                    Privacy Policy
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-blue-500 transition-colors">
+                    Terms of Service
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-blue-500 transition-colors">
+                    Cancellation Policy
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
-          
+
           <div className="pt-8 border-t border-slate-900 text-center text-xs">
-            <p>&copy; {new Date().getFullYear()} Muthu Tours Mirissa. All rights reserved.</p>
+            <p>
+              &copy; {new Date().getFullYear()} Muthu Tours Mirissa. All rights
+              reserved.
+            </p>
           </div>
         </div>
       </footer>
@@ -790,7 +1088,9 @@ export default function Home() {
         <DialogContent className="max-w-2xl bg-white p-0 overflow-hidden gap-0 rounded-2xl">
           <div className="bg-slate-900 p-6 text-white">
             <DialogHeader>
-              <DialogTitle className="text-2xl">Book Your Adventure</DialogTitle>
+              <DialogTitle className="text-2xl">
+                Book Your Adventure
+              </DialogTitle>
               <DialogDescription className="text-slate-400">
                 Secure your spot on the boat. No payment required today.
               </DialogDescription>
@@ -824,13 +1124,19 @@ export default function Home() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Guests</Label>
-                    <Select>
+                    {/* --- DROPDOWN FIX: Bound to State --- */}
+                    <Select
+                      value={String(guestCount)}
+                      onValueChange={(val) => setGuestCount(parseInt(val))}
+                    >
                       <SelectTrigger className="h-11">
-                        <SelectValue placeholder="1 Guest" />
+                        <SelectValue placeholder="Select guests" />
                       </SelectTrigger>
                       <SelectContent>
                         {[...Array(10)].map((_, i) => (
-                          <SelectItem key={i} value={String(i + 1)}>{i + 1} {i === 0 ? "Guest" : "Guests"}</SelectItem>
+                          <SelectItem key={i} value={String(i + 1)}>
+                            {i + 1} {i === 0 ? "Guest" : "Guests"}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -842,13 +1148,32 @@ export default function Home() {
                         <SelectValue placeholder="Morning (6:00 AM)" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="morning">Morning (6:00 AM)</SelectItem>
-                        <SelectItem value="midday">Midday (11:00 AM)</SelectItem>
-                        <SelectItem value="afternoon">Afternoon (2:00 PM)</SelectItem>
+                        <SelectItem value="morning">
+                          Morning (6:00 AM)
+                        </SelectItem>
+                        <SelectItem value="midday">
+                          Midday (11:00 AM)
+                        </SelectItem>
+                        <SelectItem value="afternoon">
+                          Afternoon (2:00 PM)
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                 </div>
+
+                {/* --- DISPLAY FIX: Price Summary --- */}
+                {selectedTourData && (
+                  <div className="bg-slate-100 p-4 rounded-lg flex justify-between items-center text-sm border border-slate-200">
+                    <span className="text-slate-600">
+                      {selectedTourData.title} (${selectedTourData.price}) ×{" "}
+                      {guestCount} guests
+                    </span>
+                    <span className="font-bold text-slate-900 text-lg">
+                      ${totalPrice}
+                    </span>
+                  </div>
+                )}
 
                 <div className="space-y-4 pt-4 border-t">
                   <div className="space-y-2">
@@ -858,11 +1183,19 @@ export default function Home() {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label>Email</Label>
-                      <Input type="email" placeholder="Email address" className="h-11" />
+                      <Input
+                        type="email"
+                        placeholder="Email address"
+                        className="h-11"
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label>Phone / WhatsApp</Label>
-                      <Input type="tel" placeholder="Phone number" className="h-11" />
+                      <Input
+                        type="tel"
+                        placeholder="Phone number"
+                        className="h-11"
+                      />
                     </div>
                   </div>
                 </div>
@@ -879,7 +1212,13 @@ export default function Home() {
                   />
                   {selectedDate && (
                     <div className="mt-4 text-center bg-blue-100 text-blue-800 px-4 py-2 rounded-lg text-sm font-medium w-full">
-                      Selected: {selectedDate.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                      Selected:{" "}
+                      {selectedDate.toLocaleDateString(undefined, {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
                     </div>
                   )}
                 </div>
@@ -888,29 +1227,49 @@ export default function Home() {
           </div>
 
           <div className="p-6 bg-slate-50 border-t flex gap-3">
-            <Button variant="outline" onClick={() => setBookingOpen(false)} className="flex-1 h-12">
+            <Button
+              variant="outline"
+              onClick={() => setBookingOpen(false)}
+              className="flex-1 h-12"
+            >
               Cancel
             </Button>
-            <Button className="flex-1 h-12 bg-blue-600 hover:bg-blue-700 text-white">
-              Confirm Request
+            {/* --- BUTTON FIX: Dynamic Total Price --- */}
+            <Button className="flex-1 h-12 bg-blue-600 hover:bg-blue-700 text-white flex justify-between px-6">
+              <span>Confirm Request</span>
+              <span className="bg-blue-800/30 px-2 py-1 rounded text-sm font-mono">
+                ${totalPrice > 0 ? totalPrice : 0}
+              </span>
             </Button>
           </div>
         </DialogContent>
       </Dialog>
 
       {/* --- Image Lightbox --- */}
-      <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
+      <Dialog
+        open={!!selectedImage}
+        onOpenChange={() => setSelectedImage(null)}
+      >
         <DialogContent className="max-w-[100vw] h-screen bg-black/90 border-0 p-0 flex items-center justify-center focus:outline-none">
-          <button 
+          <button
             onClick={() => setSelectedImage(null)}
             className="absolute top-6 right-6 z-50 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-all backdrop-blur-md"
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
           </button>
-          
+
           {selectedImage && (
             <img
               src={selectedImage}
@@ -920,7 +1279,6 @@ export default function Home() {
           )}
         </DialogContent>
       </Dialog>
-
     </main>
   );
 }
