@@ -2,14 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,7 +14,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Select,
@@ -182,17 +174,17 @@ const tours = [
     id: "deep-sea-fishing",
     title: "Deep Sea Fishing",
     description:
-      "Enjoy an authentic deep-sea fishing adventure off the stunning Mirissa coast. Perfect for adventure lovers looking for a hands-on ocean experience.",
+      "Choose your style: troll the open blue for tuna and sailfish, or drop down jigging for GT, kingfish, and grouper. Jigging is our top recommendation — action-packed from the moment you hit the spot.",
     price: 100,
     duration: "4–6 hours",
-    maxGuests: 10,
+    maxGuests: 7,
     image: "/images/bigfish.jpeg",
     features: [
-      "Early morning or afternoon",
-      "Pro fishing equipment",
+      "Trolling (2 rods): tuna, sailfish, mahi-mahi",
+      "Jigging (many rods): GT, kingfish, grouper ⭐",
+      "Jigging recommended — best action!",
       "Experienced local crew",
       "Safety briefing & life jackets",
-      "Catch tuna & barracuda",
       "Fresh catch cooking available",
     ],
     badge: "Adventure Pick",
@@ -298,13 +290,62 @@ const galleryImages = [
   { src: "/images/21.jpeg", alt: "Muthu Tour destination" },
 ];
 
+// --- Price Calculation Helper ---
+type SnorkelCameraOption = "without_camera" | "with_camera" | "camera_only";
+type FishingMethod = "trolling" | "jigging";
+
+function calculatePrice(
+  tourId: string,
+  guestCount: number,
+  snorkelCamera: SnorkelCameraOption,
+): { total: number; breakdown: string } {
+  if (tourId === "deep-sea-fishing") {
+    if (guestCount === 1) {
+      return { total: 250, breakdown: "1 person — $250 flat rate" };
+    } else if (guestCount === 2) {
+      return { total: 250, breakdown: "2 persons × $125/person" };
+    } else {
+      return {
+        total: guestCount * 100,
+        breakdown: `${guestCount} persons × $100/person`,
+      };
+    }
+  }
+
+  if (tourId === "snorkeling") {
+    if (snorkelCamera === "camera_only") {
+      return { total: 20, breakdown: "Camera rental only — $20 flat" };
+    }
+    const rate = snorkelCamera === "with_camera" ? 35 : 20;
+    const label =
+      snorkelCamera === "with_camera" ? "with free camera" : "without camera";
+    return {
+      total: guestCount * rate,
+      breakdown: `${guestCount} person${guestCount > 1 ? "s" : ""} × $${rate}/person (${label})`,
+    };
+  }
+
+  if (tourId === "snorkeling-whales") {
+    if (guestCount === 1) {
+      return { total: 300, breakdown: "1 person — $300 solo rate" };
+    } else {
+      return {
+        total: guestCount * 150,
+        breakdown: `${guestCount} persons × $150/person (group rate)`,
+      };
+    }
+  }
+
+  return { total: 0, breakdown: "" };
+}
+
 export default function Home() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedTour, setSelectedTour] = useState<string>("");
-
-  // --- STATE CHANGE: Guest count (defaults to 2) ---
-  const [guestCount, setGuestCount] = useState<number>(2);
-
+  const [guestCount, setGuestCount] = useState<number>(1);
+  const [snorkelCamera, setSnorkelCamera] =
+    useState<SnorkelCameraOption>("without_camera");
+  const [fishingMethod, setFishingMethod] = useState<FishingMethod>("jigging");
   const [bookingOpen, setBookingOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -312,15 +353,15 @@ export default function Home() {
   const [isGalleryExpanded, setIsGalleryExpanded] = useState(false);
   const initialGalleryCount = 5;
 
-  // --- LOGIC CHANGE: Price Calculation ---
   const selectedTourData = tours.find((t) => t.id === selectedTour);
-  const pricePerPerson = selectedTourData ? selectedTourData.price : 0;
-  const totalPrice = pricePerPerson * guestCount;
+  const { total: totalPrice, breakdown: priceBreakdown } = calculatePrice(
+    selectedTour,
+    guestCount,
+    snorkelCamera,
+  );
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -335,14 +376,15 @@ export default function Home() {
 
   const handleBookNow = (tourId: string) => {
     setSelectedTour(tourId);
+    setGuestCount(1);
+    setSnorkelCamera("without_camera");
+    setFishingMethod("jigging");
     setBookingOpen(true);
   };
 
   const scrollToContact = () => {
     const element = document.getElementById("contact");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+    if (element) element.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
@@ -547,7 +589,7 @@ export default function Home() {
                   <img
                     src={tour.image}
                     alt={tour.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60" />
                   <Badge
@@ -590,7 +632,7 @@ export default function Home() {
 
                 <CardFooter className="p-6 pt-0 mt-auto flex items-center justify-between border-t border-slate-100 bg-slate-50/50">
                   <div className="flex flex-col">
-                    <span className="text-sm text-slate-500">
+                    <span className="text-sm text-slate-500 pt-2">
                       Starting from
                     </span>
                     <div className="flex items-baseline gap-1">
@@ -602,7 +644,7 @@ export default function Home() {
                   </div>
                   <Button
                     onClick={() => handleBookNow(tour.id)}
-                    className="bg-slate-900 hover:bg-slate-800 text-white rounded-xl px-6 h-12 shadow-lg hover:shadow-xl transition-all"
+                    className="bg-slate-900 hover:bg-slate-800 text-white rounded-xl mt-4 px-6 h-12 shadow-lg hover:shadow-xl transition-all"
                   >
                     Book Now
                   </Button>
