@@ -1413,7 +1413,11 @@ export default function Home() {
                     selected={selectedDate}
                     onSelect={setSelectedDate}
                     className="rounded-md"
-                    disabled={(date) => date < new Date()}
+                    disabled={(date) => {
+                      const today = new Date();
+                      today.setHours(0, 0, 0, 0);
+                      return date < today;
+                    }}
                   />
                   {selectedDate && (
                     <div className="mt-4 text-center bg-blue-100 text-blue-800 px-4 py-2 rounded-lg text-sm font-medium w-full">
